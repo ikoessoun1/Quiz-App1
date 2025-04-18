@@ -82,10 +82,12 @@ const handleQuestionDisplay = () => {
       const correctIndex = questions[currentQuestionIndex].answer;
   
       if (selectedIndex === correctIndex) {
-        alert("Correct!");
+        document.getElementById.innerText = "Correct!";
+        console.log ("Correct!");
         score++;
       } else {
-        alert("Wrong!");
+        document.getElementById.innerText = "Wrong!";
+        console.log("Wrong!")
       }
   
       currentQuestionIndex++;
