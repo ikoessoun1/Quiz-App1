@@ -1,7 +1,3 @@
-// This is a simple quiz application that displays questions and options to the user.
-// The user selects an answer, and the application checks if it's correct or wrong.
-
-
 const questions = [
   {
     question: "What is the capital of France?",
@@ -55,67 +51,76 @@ const questions = [
   }
 ];
 
-
 let currentQuestionIndex = 0;
 let score = 0;
 let totalQuestions = questions.length;
 
-
-
+// Function to handle question display
 const handleQuestionDisplay = () => {
   const questionContainer = document.getElementById("question-container");
-  questionContainer.innerHTML =`
+  questionContainer.innerHTML = `
     <h2>${questions[currentQuestionIndex].question}</h2>
     <ul id="options-list"></ul>
+    <div><p id="result"></p></div>
   `;
-  const optionsList = document.getElementById("options-list"); 
+  
+  const optionsList = document.getElementById("options-list");
 
+  // Display all options as buttons
   questions[currentQuestionIndex].options.forEach((option, index) => {
     const li = document.createElement("li");
     li.innerHTML = `<button class="option-button" data-index="${index}">${option}</button>`;
     optionsList.appendChild(li);
-    
-  })
+  });
+
+  // Add event listeners to the option buttons
   document.querySelectorAll(".option-button").forEach(button => {
     button.addEventListener("click", (e) => {
       const selectedIndex = parseInt(e.target.dataset.index);
       const correctIndex = questions[currentQuestionIndex].answer;
-  
+
+      // Check if the answer is correct or wrong
+      const result = document.getElementById("result");
+
       if (selectedIndex === correctIndex) {
-        document.getElementById.innerText = "Correct!";
-        console.log ("Correct!");
+        result.innerText = "Correct!";
+        result.className = "correct";
         score++;
       } else {
-        document.getElementById.innerText = "Wrong!";
-        console.log("Wrong!")
+        result.innerText = "Wrong!";
+        result.className = "wrong";
       }
-  
+      
+
+    // Wait 1 second before going to the next question
+    setTimeout(() => {
       currentQuestionIndex++;
-  
       if (currentQuestionIndex < questions.length) {
         handleQuestionDisplay();
       } else {
         showFinalScore();
       }
-      function showFinalScore() {
-        const questionContainer = document.getElementById("question-container");
-        questionContainer.innerHTML = `
-          <h2>Quiz Completed!</h2>
-          <p>Your score is ${score} out of ${questions.length}.</p>
-          <button id="restart-btn">Play Again</button>
-        `;
-      
-        document.getElementById("restart-btn").addEventListener("click", () => {
-          currentQuestionIndex = 0;
-          score = 0;
-          handleQuestionDisplay();
-        });
-      }      
-    });
+    }, 1000);
   });
+});
+};
+// Function to show the final score
+const showFinalScore = () => {
+  const questionContainer = document.getElementById("question-container");
+  questionContainer.innerHTML = `
+    <h2>Quiz Completed!</h2>
+    <p>Your score is ${score} out of ${questions.length}.</p>
+    <button id="restart-btn">Play Again</button>
+  `;
   
-}
+  // Add event listener to restart button
+  document.getElementById("restart-btn").addEventListener("click", () => {
+    // Reset game state
+    currentQuestionIndex = 0;
+    score = 0;
+    handleQuestionDisplay(); // Restart the quiz
+  });
+};
 
-
-
+// Initialize the quiz by displaying the first question
 handleQuestionDisplay();
